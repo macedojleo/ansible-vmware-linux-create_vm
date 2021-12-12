@@ -1,0 +1,30 @@
+---
+vmware: #VMWARE CONFIGURATION VARS
+ host: <vmware_hostname>
+ datacenter: <vmware_datacenter_name>
+ cluster: <vmware_cluster_name>
+ folder: "<folder you want to create the VM>"
+ datastore: <name_of_the_datastore_will_stored_the_vm>
+vm: #VIRTUAL MACHINE CONFIGURATION VARS
+ name: <vm_name>
+ annotation: "<Description_of_VM>"
+ guest: <rhel7_64Guest>
+ state: present
+ disk:
+   size_gb: 10
+   controller_number: "0"
+   unit_number: "0"
+ hardware:
+   memory: 2048 #Mb
+   cpu: 2
+   scsi: "paravirtual"
+ cdrom:
+   controller_type: ide
+   controller_number: 0
+   unit_number: 0
+   type: iso
+   iso_path: "[<datastore_where_iso_is_stored>] <iso_file>"
+ network:
+   name: <VLAN_NAME>
+   type: static
+   device_type: vmxnet3

@@ -1,0 +1,70 @@
+---
+- name: CREATE A NEW VM ON VMWARE
+  hosts: localhost
+  connection: local
+  gather_facts: no
+  vars_files:
+    - credentials.yml
+    - config.yml
+  tasks:
+  - name: Configuring VM
+    vmware_guest:
+      validate_certs: False
+      hostname: "{{ vmware.host }}"
+      username: "{{ user }}" 
+      password: "{{ pass }}"
+      datacenter: "{{ vmware.datacenter }}"
+      cluster: "{{ vmware.cluster }}"
+      folder: "{{ vmware.folder }}"
+      name: "{{ vm.name }}"
+      annotation: "{{ vm.annotation }}"
+      state: "{{ vm.state }}"
+      guest_id: "{{ vm.guest }}"
+      disk:
+      - size_gb: "{{ vm.disk.size_gb }}"
+        datastore: "{{ vmware.datastore }}"
+      hardware:
+        memory_mb: "{{ vm.hardware.memory }}"
+        num_cpus: "{{ vm.hardware.cpu }}"
+        scsi: "{{ vm.hardware.scsi }}"
+      cdrom:
+      - controller_type: "{{ vm.cdrom.controller_type }}"
+        controller_number: "{{ vm.cdrom.controller_number }}"
+        unit_number: "{{ vm.cdrom.unit_number }}"
+        state: present
+        type: "{{ vm.cdrom.type }}"
+        iso_path: "{{ vm.cdrom.iso_path }}"
+      networks:
+      - name: "{{ vm.network.name }}"
+        type: "{{ vm.network.type }}"
+        device_type: "{{ vm.network.device_type }}"
+
+  - name: Optional - Creating a new disk
+    vmware_guest_disk:
+      validate_certs: False
+      hostname: "{{ vmware.host }}"
+      username: "{{ user }}"
+      password: "{{ pass }}"
+      datacenter: "{{ vmware.datacenter }}"
+      name: "{{ vm.name }}"
+      disk:
+        - size_gb: 10
+          datastore: "{{ vmware.datastore }}"
+          state: present
+          scsi_controller: 0 
+          unit_number: 1 
+          scsi_type: "{{ vm.hardware.scsi }}"
+          disk_mode: 'persistent'
+
+  - name: starting VM
+    vmware_guest:
+      validate_certs: False
+      hostname: "{{ vmware.host }}" 
+      username: "{{ user }}"
+      password: "{{ pass }}"
+      name: "{{ vm.name }}"
+      datacenter: "{{ vmware.datacenter }}"
+      cluster: "{{ vmware.cluster }}"
+      folder: "{{ vmware.folder }}"
+      state: powered-on
+    delegate_to: localhost

@@ -1,0 +1,31 @@
+---
+- name: CREATE TEMPLATE
+  hosts: localhost
+  connection: local
+  gather_facts: no
+  vars_files:
+    - credentials.yml
+    - config.yml
+  tasks:
+  - name: Set VM to Powered-off state
+    vmware_guest_powerstate:
+      validate_certs: False
+      hostname: "{{ vmware.host }}"
+      username: "{{ user }}"
+      password: "{{ pass }}"
+      name: "{{ vm.name }}"
+      state: shutdown-guest
+      state_change_timeout: 400
+    
+  - name: Convert VM to template
+    vmware_guest:
+      validate_certs: False
+      hostname: "{{ vmware.host }}"
+      username: "{{ user }}"
+      password: "{{ pass }}"
+      datacenter: "{{ vmware.datacenter }}"
+      cluster: "{{ vmware.cluster }}"
+      folder: "{{ vmware.folder }}"
+      name: "{{ vm.name }}"
+      is_template: yes
+    delegate_to: localhost
