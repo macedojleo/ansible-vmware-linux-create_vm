@@ -1,0 +1,31 @@
+---
+vmware: #VMWARE CONFIGURATION VARS
+ host: <vmware_hostname>
+ datacenter: <vmware_datacenter_name>
+ cluster: <vmware_cluster_name>
+ folder: "<folder you want to store the new VM>"
+ datastore: <name_of_the_datastore_will_stored_the_vm>
+ template: <Template_stored_in_the_same_DS>
+
+vm: #VIRTUAL MACHINE CONFIGURATION VARS
+ name: <VM_name>
+ hardware:
+   memory: 2048 #Mb
+   cpu: 2
+   scsi: paravirtual
+ network:
+   name: <device_name>
+   type: static
+   device_type: vmxnet3
+   vlan: <vlan_id>
+   ip: <ip_address>
+   netmask: <netmask>
+   gateway: <default_gateway>
+ customization:
+   hostname: <hostname>
+   dns_primary: <DNS_1>
+   dns_secundary: <DNS_2>
+   domain: <domain_name>
+   tmp_adm_password: <'root_password'>
+   orgname: <organization_name>
+   tz: <timezone_code>

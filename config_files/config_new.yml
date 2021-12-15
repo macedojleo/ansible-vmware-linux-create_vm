@@ -3,8 +3,9 @@ vmware: #VMWARE CONFIGURATION VARS
  host: <vmware_hostname>
  datacenter: <vmware_datacenter_name>
  cluster: <vmware_cluster_name>
- folder: "<folder you want to create the VM>"
+ folder: "<folder you want to store the new VM>"
  datastore: <name_of_the_datastore_will_stored_the_vm>
+ 
 vm: #VIRTUAL MACHINE CONFIGURATION VARS
  name: <vm_name>
  annotation: "<Description_of_VM>"
