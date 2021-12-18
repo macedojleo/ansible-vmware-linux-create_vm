@@ -1,0 +1,50 @@
+---
+- name: CREATE VM FROM TEMPLATE
+  hosts: localhost
+  connection: local
+  gather_facts: no
+  vars_files:
+    - credentials.yml
+    - /config_files/config_clone.yml
+  tasks:
+  - name: Clone VM
+    vmware_guest:
+      validate_certs: False
+      hostname: "{{ vmware.host }}" 
+      username: "{{ user }}" 
+      password: "{{ pass }}" 
+      name: "{{ vm.name }}"
+      template: "{{ vmware.template }}"
+      datacenter: "{{ vmware.datacenter }}"
+      cluster: "{{ vmware.cluster }}"
+      folder: "{{ vmware.folder }}"
+      state: present
+      hardware:
+        memory_mb: "{{ vm.hardware.memory }}"
+        num_cpus: "{{ vm.hardware.cpu }}"
+        scsi: "{{ vm.hardware.scsi }}"
+      networks:
+      - name: "{{ vm.network.name }}"
+        type: "{{ vm.network.type }}"
+        device_type: "{{ vm.network.device_type }}"
+        vlan: "{{ vm.network.vlan }}"
+        ip: "{{ vm.network.ip }}"
+        netmask: "{{ vm.network.netmask }}"
+        gateway: "{{ vm.network.gateway}}"
+        connected: yes
+        start_connected: yes
+      #PERL INSTALLATION IS REQUIRED IN ORDER TO CUSTOMIZE THE FOLLOWING PARAMETERS.
+      customization:
+        hostname: "{{ vm.customization.hostname }}"
+        dns_servers:
+        - "{{ vm.customization.dns_primary }}"
+        - "{{ vm.customization.dns_secundary }}"
+        domain: "{{ vm.customization.domain }}"
+        password: "{{ vm.customization.tmp_adm_password }}"
+        orgname: "{{ vm.customization.orgname }}"
+        timezone: "{{ vm.customization.tz }}"
+      wait_for_ip_address: True
+
+  - name: waiting for vm
+    pause:
+      minutes: 1
