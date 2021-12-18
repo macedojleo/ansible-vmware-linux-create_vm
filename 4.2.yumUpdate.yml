@@ -1,0 +1,29 @@
+---
+- name: INSTALL UPDATES
+  hosts: localhost
+  connection: local
+  gather_facts: no
+  vars_files:
+    - /config_files/credentials.yml
+    - /config_files/config_clone.yml
+  tasks:
+  - name: Yum Update
+    vmware_vm_shell:
+      validate_certs: False
+      hostname: "{{ vmware.host }}"
+      username: "{{ user }}" 
+      password: "{{ pass }}" 
+      vm_username: root
+      vm_password: "{{ vm.customization.tmp_adm_password }}"
+      vm_id: "{{ vm.name }}"
+      vm_shell: '/usr/bin/yum'
+      vm_shell_args: "update -y"
+      wait_for_process: true
+    retries: 3
+    delay: 15 
+    register: update      
+    until: update is succeeded
+
+  - name: waiting for configuration.
+    pause:
+      minutes: 1

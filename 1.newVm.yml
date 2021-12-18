@@ -4,7 +4,7 @@
   connection: local
   gather_facts: no
   vars_files:
-    - credentials.yml
+    - /config_files/credentials.yml
     - /config_files/config_new.yml
   tasks:
   - name: Configuring VM

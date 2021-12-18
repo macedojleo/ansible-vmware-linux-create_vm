@@ -1,0 +1,34 @@
+---
+- name: UPDATE VMWARE TOOLS
+  hosts: localhost
+  connection: local
+  gather_facts: no
+  vars_files:
+    - /config_files/credentials.yml
+    - /config_files/config_new.yml
+  tasks:
+  - name: Get VM UUID
+    vmware_guest_facts:
+      validate_certs: False
+      hostname: "{{ vmware.host }}"
+      username: "{{ user }}" 
+      password: "{{ pass }}"
+      datacenter: "{{ vmware.datacenter }}"
+      folder: "{{ vmware.folder }}"
+      name: "{{ vm.name }}"
+    delegate_to: localhost
+    register: vm_facts
+
+  - name: Upgrade vmware tools
+    vmware_guest_tools_upgrade:
+      validate_certs: False
+      hostname: "{{ vmware.host }}"
+      username: "{{ user }}"
+      password: "{{ pass }}"
+      datacenter: "{{ vmware.datacenter }}"
+      uuid: "{{ vm_facts.instance.hw_product_uuid }}"
+    delegate_to: localhost
+
+  - name: waiting for configuration.
+    pause:
+      minutes: 2

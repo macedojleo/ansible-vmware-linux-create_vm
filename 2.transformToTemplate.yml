@@ -4,8 +4,8 @@
   connection: local
   gather_facts: no
   vars_files:
-    - credentials.yml
-    - ../config_files/config_new.yml
+    - /config_files/credentials.yml
+    - /config_files/config_new.yml
   tasks:
   - name: Set VM to Powered-off state
     vmware_guest_powerstate:

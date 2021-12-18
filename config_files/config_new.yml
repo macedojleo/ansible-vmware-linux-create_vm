@@ -9,7 +9,7 @@ vmware: #VMWARE CONFIGURATION VARS
 vm: #VIRTUAL MACHINE CONFIGURATION VARS
  name: <vm_name>
  annotation: "<Description_of_VM>"
- guest: <rhel7_64Guest>
+ guest: rhel7_64Guest
  state: present
  disk:
    size_gb: 10
